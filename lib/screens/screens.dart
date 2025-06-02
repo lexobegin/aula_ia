@@ -1,2 +1,9 @@
+export 'package:aula_ia/screens/academico/notas_por_periodo_screen.dart';
+export 'package:aula_ia/screens/academico/progreso_academico_screen.dart';
+export 'package:aula_ia/screens/asistencia/historial_asistencia_screen.dart';
+export 'package:aula_ia/screens/asistencia/asistencia_screen.dart';
+export 'package:aula_ia/screens/horario/horario_screen.dart';
+export 'package:aula_ia/screens/materia/materia_screen.dart';
+export 'package:aula_ia/screens/prediccion/prediccion_screen.dart';
 export 'package:aula_ia/screens/login/home_screen.dart';
 export 'package:aula_ia/screens/login/login_screen.dart';

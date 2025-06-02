@@ -1,3 +1,6 @@
+//import 'package:aula_ia/screens/horario/horario_screen.dart';
+//import 'package:aula_ia/screens/materia/materia_screen.dart';
+//import 'package:aula_ia/screens/prediccion/prediccion_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:aula_ia/components/components.dart';
@@ -42,6 +45,13 @@ class MyApp extends StatelessWidget {
           '/': (_) => const HomeScreen(),
           'splash': (_) => const SplashScreen(),
           'login': (_) => const LoginScreen(),
+          'materia': (_) => const MateriaScreen(),
+          'horario': (_) => const HorarioScreen(),
+          'prediccion': (_) => const PrediccionScreen(),
+          'asistencia': (_) => const AsistenciaScreen(),
+          'historial_asistencia': (_) => const HistorialAsistenciaScreen(),
+          'progreso_academico': (_) => const ProgresoAcademicoScreen(),
+          'notas_por_periodo': (_) => const NotasPorPeriodoScreen(),
         },
         theme: ThemeData.light().copyWith(
             scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),

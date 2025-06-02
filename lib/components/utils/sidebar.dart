@@ -1,3 +1,7 @@
+//import 'package:aula_ia/screens/horario/horario_screen.dart';
+//import 'package:aula_ia/screens/materia/materia_screen.dart';
+//import 'package:aula_ia/screens/prediccion/prediccion_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:aula_ia/screens/screens.dart';
 import 'package:aula_ia/services/auth/auth_service.dart';
@@ -152,21 +156,49 @@ class Sidebar extends StatelessWidget {
                 leading: const Icon(Icons.menu_book),
                 title: const Text('Materias'),
                 onTap: () {
-                  // Acción para mostrar una muestra de ficha médica
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MateriaScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.calendar_month),
+                title: const Text('Horario'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HorarioScreen(),
+                    ),
+                  );
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(Icons.check_circle),
+                title: const Text('Registrar asistencia'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AsistenciaScreen(),
+                    ),
+                  );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.grade),
-                title: const Text('Notas'),
+                title: const Text('Historial asistencia'),
                 onTap: () {
-                  // Acción para mostrar una muestra de ficha médica
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.check_circle),
-                title: const Text('Asistencia'),
-                onTap: () {
-                  // Acción para mostrar una muestra de ficha médica
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HistorialAsistenciaScreen(),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -177,10 +209,39 @@ class Sidebar extends StatelessWidget {
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.grade),
+                title: const Text('Notas'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NotasPorPeriodoScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.analytics),
+                title: const Text('Progreso acadenico'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProgresoAcademicoScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.analytics),
                 title: const Text('Predicción de rendimiento'),
                 onTap: () {
-                  // Acción para mostrar FAQ
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PrediccionScreen(),
+                    ),
+                  );
                 },
               ),
               const Divider(

@@ -183,6 +183,155 @@ class AuthService extends ChangeNotifier {
     await _storage.delete(key: 'token');
   }
 
+//Materia
+  Future<List<Materia>> getMateriasInscritas() async {
+    final response = await http.get(
+      Uri.parse('${servidor.baseUrl}/inscripciones/?gestion_estado=EN%20CURSO'),
+      headers: {'Authorization': 'Bearer $_token'},
+    );
+    final json = jsonDecode(response.body);
+    final List<dynamic> inscripciones = json['results'];
+
+    // Extraer todas las materias de cada inscripción
+    final List<Materia> materias = [];
+    for (final inscripcion in inscripciones) {
+      final List<dynamic> materiasJson = inscripcion['materias'];
+      materias.addAll(materiasJson.map((json) => Materia.fromJson(json)));
+    }
+
+    return materias;
+  }
+
+  // Horario
+  Future<List<Horario>> getHorariosAlumno() async {
+    final response = await http.get(
+      Uri.parse('${servidor.baseUrl}/horarios/'),
+      headers: {'Authorization': 'Bearer $_token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body) as List;
+      return data.map((json) => Horario.fromJson(json)).toList();
+    } else {
+      throw Exception('Error al cargar horarios');
+    }
+  }
+
+  //Usuario actual //me
+  Future<User> obtenerUsuarioActual() async {
+    final response = await http.get(
+      Uri.parse('${servidor.baseUrl}/auth/me/'),
+      headers: {'Authorization': 'Bearer $_token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return User.fromJson(data);
+    } else {
+      throw Exception('Error al obtener usuario actual');
+    }
+  }
+
+  // generarPrediccion
+  Future<Prediccion> generarPrediccion() async {
+    final usuario = await obtenerUsuarioActual();
+
+    final response = await http.post(
+      Uri.parse('${servidor.baseUrl}/predicciones/generar_prediccion/'),
+      headers: {
+        'Authorization': 'Bearer $_token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'alumno_id': usuario.id}),
+    );
+
+    if (response.statusCode == 200) {
+      return Prediccion.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Error al generar predicción');
+    }
+  }
+
+  //Asistencia
+  // services/auth_service.dart
+  Future<void> registrarAsistenciaAlumno({String? justificacion}) async {
+    final response = await http.post(
+      Uri.parse('${servidor.baseUrl}/asistencias/registrar_asistencia_alumno/'),
+      headers: {
+        'Authorization': 'Bearer $_token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'justificacion': justificacion,
+      }),
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception(jsonDecode(response.body)['error'] ??
+          'Error al registrar asistencia');
+    }
+  }
+
+  // Historial de asistencia
+  Future<List<Asistencia>> getHistorialAsistencia() async {
+    final response = await http.get(
+      Uri.parse('${servidor.baseUrl}/asistencias/historial_alumno/'),
+      headers: {'Authorization': 'Bearer $_token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body) as List;
+      return data.map((json) => Asistencia.fromJson(json)).toList();
+    } else {
+      throw Exception(
+          jsonDecode(response.body)['error'] ?? 'Error al cargar historial');
+    }
+  }
+
+  // Progreso Academico
+  Future<ProgresoAcademico> getProgresoAcademico() async {
+    final response = await http.get(
+      Uri.parse('${servidor.baseUrl}/notas/progreso_academico/'),
+      headers: {'Authorization': 'Bearer $_token'},
+    );
+
+    if (response.statusCode == 200) {
+      return ProgresoAcademico.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception(
+          jsonDecode(response.body)['error'] ?? 'Error al cargar progreso');
+    }
+  }
+
+  // services/auth_service.dart
+  Future<Map<String, dynamic>> getNotasPorPeriodo({String? periodo}) async {
+    final url = periodo != null
+        ? '${servidor.baseUrl}/notas/notas_por_periodo/?periodo=$periodo'
+        : '${servidor.baseUrl}/notas/notas_por_periodo/';
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {'Authorization': 'Bearer $_token'},
+    );
+
+    //if (response.statusCode == 200) {
+    //return jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      // Convertir la lista de notas a List<NotaPeriodo>
+      final notas = (data['notas'] as List)
+          .map((item) => NotaPeriodo.fromJson(item))
+          .toList();
+      return {
+        'notas': notas,
+        'periodos_disponibles': List<String>.from(data['periodos_disponibles']),
+      };
+    } else {
+      throw Exception(
+          jsonDecode(response.body)['error'] ?? 'Error al cargar notas');
+    }
+  }
+
 //Productos
   /*Future<List<Producto>> fetchProductos() async {
     final response =
